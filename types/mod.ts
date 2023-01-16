@@ -86,29 +86,47 @@ type RichTextObject =
 type CommonBlockTypeObject = {
   rich_text: RichTextObject[];
   color: Color;
+  children?: MetaBlockTypeObject[];
 };
 
 type Toggleable = {
   is_toggleable: boolean;
 };
 
-type BaseBlockTypeObject<T extends BlockType, U = CommonBlockTypeObject> = {
-  [key in T]: CommonBlockTypeObject & U;
-};
+type BaseBlockTypeObject<T extends BlockType> = T extends `heading_${number}`
+  ? {
+    [key in T]: CommonBlockTypeObject & Toggleable;
+  }
+  : {
+    [key in T]: CommonBlockTypeObject;
+  };
 
 type BlockTypeObject =
   | BaseBlockTypeObject<"paragraph">
-  | BaseBlockTypeObject<"heading_1", Toggleable>
-  | BaseBlockTypeObject<"heading_2", Toggleable>
-  | BaseBlockTypeObject<"heading_3", Toggleable>
+  | BaseBlockTypeObject<"heading_1">
+  | BaseBlockTypeObject<"heading_2">
+  | BaseBlockTypeObject<"heading_3">
   | BaseBlockTypeObject<"bulleted_list_item">
   | BaseBlockTypeObject<"numbered_list_item">;
+
+type BaseMetaBlockTypeObject<T extends BlockType> = {
+  type: T;
+} & BaseBlockTypeObject<T>;
+
+type MetaBlockTypeObject =
+  | BaseMetaBlockTypeObject<"paragraph">
+  | BaseMetaBlockTypeObject<"heading_1">
+  | BaseMetaBlockTypeObject<"heading_2">
+  | BaseMetaBlockTypeObject<"heading_3">
+  | BaseMetaBlockTypeObject<"bulleted_list_item">
+  | BaseMetaBlockTypeObject<"numbered_list_item">;
 
 export type {
   Annotations,
   BlockType,
   BlockTypeObject,
   Color,
+  MetaBlockTypeObject,
   RichTextObject,
   RichTextObjectEquation,
   RichTextObjectMention,

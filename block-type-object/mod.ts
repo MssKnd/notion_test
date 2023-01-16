@@ -1,21 +1,26 @@
 import { richTextStack } from "../rich-text-stack/mod.ts";
-import { BlockTypeObject, Color } from "../types/mod.ts";
+import { BlockTypeObject, Color, MetaBlockTypeObject } from "../types/mod.ts";
 
-function createParagraphBlockTypeObject(): BlockTypeObject {
+function createParagraphBlockTypeObject(
+  children?: MetaBlockTypeObject[],
+): BlockTypeObject {
   return {
     paragraph: {
       rich_text: richTextStack.popAll(),
       color: "default",
+      children,
     },
   };
 }
 
 function createHeadingBlockTypeObject(
   level: number,
+  children?: MetaBlockTypeObject[],
 ): BlockTypeObject {
   const blockTypeObject = {
     rich_text: richTextStack.popAll(),
     color: "default" as Color,
+    children,
     is_toggleable: false,
   };
   switch (level) {
@@ -34,20 +39,26 @@ function createHeadingBlockTypeObject(
   }
 }
 
-function createBulletedListBlockTypeObject(): BlockTypeObject {
+function createBulletedListBlockTypeObject(
+  children?: MetaBlockTypeObject[],
+): BlockTypeObject {
   return {
     bulleted_list_item: {
       rich_text: richTextStack.popAll(),
       color: "default",
+      children,
     },
   };
 }
 
-function createNumberedListBlockTypeObject(): BlockTypeObject {
+function createNumberedListBlockTypeObject(
+  children?: MetaBlockTypeObject[],
+): BlockTypeObject {
   return {
     numbered_list_item: {
       rich_text: richTextStack.popAll(),
       color: "default",
+      children,
     },
   };
 }
