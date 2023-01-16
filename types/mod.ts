@@ -83,13 +83,26 @@ type RichTextObject =
   | RichTextObjectMention
   | RichTextObjectEquation;
 
-type BlockTypeObject<T extends BlockType> = {
-  [key in T]: {
-    rich_text: RichTextObject[];
-    color: Color;
-    is_toggleable: boolean;
-  };
+type CommonBlockTypeObject = {
+  rich_text: RichTextObject[];
+  color: Color;
 };
+
+type Toggleable = {
+  is_toggleable: boolean;
+};
+
+type BaseBlockTypeObject<T extends BlockType, U = CommonBlockTypeObject> = {
+  [key in T]: CommonBlockTypeObject & U;
+};
+
+type BlockTypeObject =
+  | BaseBlockTypeObject<"paragraph">
+  | BaseBlockTypeObject<"heading_1", Toggleable>
+  | BaseBlockTypeObject<"heading_2", Toggleable>
+  | BaseBlockTypeObject<"heading_3", Toggleable>
+  | BaseBlockTypeObject<"bulleted_list_item">
+  | BaseBlockTypeObject<"numbered_list_item">;
 
 export type {
   Annotations,
