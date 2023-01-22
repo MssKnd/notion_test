@@ -1,25 +1,30 @@
-import { richTextStack } from "../rich-text-stack/mod.ts";
 import { Color, MetaBlockTypeObject, RichTextObject } from "../types/mod.ts";
 
 function createMetaParagraphBlockTypeObject(
+  richTexts: RichTextObject[],
   children?: MetaBlockTypeObject[],
 ): MetaBlockTypeObject {
   return {
     type: "paragraph",
     paragraph: {
-      rich_text: richTextStack.popAll(),
+      rich_text: richTexts,
       color: "default",
       children,
     },
   };
 }
 
+function createMetaEmptyParagraphBlockTypeObject(): MetaBlockTypeObject {
+  return createMetaParagraphBlockTypeObject([]);
+}
+
 function createMetaHeadingBlockTypeObject(
+  richTexts: RichTextObject[],
   level: number,
   children?: MetaBlockTypeObject[],
 ): MetaBlockTypeObject {
   const blockTypeObject = {
-    rich_text: richTextStack.popAll(),
+    rich_text: richTexts,
     color: "default" as Color,
     children,
     is_toggleable: false,
@@ -42,13 +47,6 @@ function createMetaHeadingBlockTypeObject(
       };
   }
 }
-
-// function createMetaBlockTypeObject(blockTypeObject: BlockTypeObject): MetaBlockTypeObject {
-//   const a = 'paragraph' in blockTypeObject ? blockTypeObject.paragraph : 'test'
-//   return {
-
-//   }
-// }
 
 function createMetaBulletedListBlockTypeObject(
   richTexts: RichTextObject[],
@@ -80,6 +78,7 @@ function createMetaNumberedListBlockTypeObject(
 
 export {
   createMetaBulletedListBlockTypeObject,
+  createMetaEmptyParagraphBlockTypeObject,
   createMetaHeadingBlockTypeObject,
   createMetaNumberedListBlockTypeObject,
   createMetaParagraphBlockTypeObject,

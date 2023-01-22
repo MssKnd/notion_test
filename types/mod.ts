@@ -61,23 +61,23 @@ type Annotations = {
   code: boolean;
   color: Color;
 };
-type RichTextObjectBase = {
-  type: RichTextType;
+type RichTextObjectBase<T extends RichTextType> = {
+  type: T;
   annotations: Annotations;
   plain_text: string;
   href: string | null;
 };
 
 type RichTextObjectText =
-  & RichTextObjectBase
+  & RichTextObjectBase<"text">
   & {
     text: {
       content: string;
       link: { url: string } | null;
     };
   };
-type RichTextObjectMention = RichTextObjectBase;
-type RichTextObjectEquation = RichTextObjectBase;
+type RichTextObjectMention = RichTextObjectBase<"mention">;
+type RichTextObjectEquation = RichTextObjectBase<"equation">;
 type RichTextObject =
   | RichTextObjectText
   | RichTextObjectMention

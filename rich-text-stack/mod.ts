@@ -18,6 +18,14 @@ const richTextStack = {
     }
     return current?.richTextObjects ?? [];
   },
+  appendSoftBreak: () => {
+    const richTextObject = _stack.at(-1)?.richTextObjects.at(-1);
+    if (!richTextObject || richTextObject.type !== "text") {
+      return;
+    }
+    richTextObject.plain_text += "\n";
+    richTextObject.text.content += "\n";
+  },
 };
 
 export { richTextStack };

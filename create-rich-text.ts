@@ -13,21 +13,20 @@ type TextObjectProps = {
   content: string;
   link: string | null;
   annotations: Annotations;
-  plain_text: string;
   href: string | null;
 };
 
 function createTextObject(
-  { content, link = null, annotations, plain_text, href }: TextObjectProps,
+  { content, link = null, annotations, href }: TextObjectProps,
 ): RichTextObjectText {
   return {
     type: "text",
     text: {
       content,
-      link,
+      link: link ? { url: link } : null,
     },
     annotations,
-    plain_text,
+    plain_text: content,
     href,
   };
 }
