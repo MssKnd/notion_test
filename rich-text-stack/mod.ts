@@ -1,15 +1,22 @@
 import { RichTextObject } from "../types/mod.ts";
 
-let _stack: RichTextObject[] = [];
+const _stack: {
+  richTextObjects: RichTextObject[];
+}[] = [{ richTextObjects: [] }];
 
 const richTextStack = {
-  push: function (richTextObject: RichTextObject) {
-    _stack.push(richTextObject);
+  pushLevel: () => {
+    _stack.push({ richTextObjects: [] });
+  },
+  push: (richTextObject: RichTextObject) => {
+    _stack.at(-1)?.richTextObjects.push(richTextObject);
   },
   popAll: function () {
-    const copy = [..._stack];
-    _stack = [];
-    return copy;
+    const current = _stack.pop();
+    if (_stack.length === 0) {
+      this.pushLevel();
+    }
+    return current?.richTextObjects ?? [];
   },
 };
 

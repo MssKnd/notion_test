@@ -1,10 +1,11 @@
 import { richTextStack } from "../rich-text-stack/mod.ts";
-import { BlockTypeObject, Color, MetaBlockTypeObject } from "../types/mod.ts";
+import { Color, MetaBlockTypeObject, RichTextObject } from "../types/mod.ts";
 
-function createParagraphBlockTypeObject(
+function createMetaParagraphBlockTypeObject(
   children?: MetaBlockTypeObject[],
-): BlockTypeObject {
+): MetaBlockTypeObject {
   return {
+    type: "paragraph",
     paragraph: {
       rich_text: richTextStack.popAll(),
       color: "default",
@@ -13,10 +14,10 @@ function createParagraphBlockTypeObject(
   };
 }
 
-function createHeadingBlockTypeObject(
+function createMetaHeadingBlockTypeObject(
   level: number,
   children?: MetaBlockTypeObject[],
-): BlockTypeObject {
+): MetaBlockTypeObject {
   const blockTypeObject = {
     rich_text: richTextStack.popAll(),
     color: "default" as Color,
@@ -26,37 +27,51 @@ function createHeadingBlockTypeObject(
   switch (level) {
     case 1:
       return {
+        type: "heading_1",
         heading_1: blockTypeObject,
       };
     case 2:
       return {
+        type: "heading_2",
         heading_2: blockTypeObject,
       };
     default:
       return {
+        type: "heading_3",
         heading_3: blockTypeObject,
       };
   }
 }
 
-function createBulletedListBlockTypeObject(
+// function createMetaBlockTypeObject(blockTypeObject: BlockTypeObject): MetaBlockTypeObject {
+//   const a = 'paragraph' in blockTypeObject ? blockTypeObject.paragraph : 'test'
+//   return {
+
+//   }
+// }
+
+function createMetaBulletedListBlockTypeObject(
+  richTexts: RichTextObject[],
   children?: MetaBlockTypeObject[],
-): BlockTypeObject {
+): MetaBlockTypeObject {
   return {
+    type: "bulleted_list_item",
     bulleted_list_item: {
-      rich_text: richTextStack.popAll(),
+      rich_text: richTexts,
       color: "default",
       children,
     },
   };
 }
 
-function createNumberedListBlockTypeObject(
+function createMetaNumberedListBlockTypeObject(
+  richTexts: RichTextObject[],
   children?: MetaBlockTypeObject[],
-): BlockTypeObject {
+): MetaBlockTypeObject {
   return {
+    type: "numbered_list_item",
     numbered_list_item: {
-      rich_text: richTextStack.popAll(),
+      rich_text: richTexts,
       color: "default",
       children,
     },
@@ -64,8 +79,8 @@ function createNumberedListBlockTypeObject(
 }
 
 export {
-  createBulletedListBlockTypeObject,
-  createHeadingBlockTypeObject,
-  createNumberedListBlockTypeObject,
-  createParagraphBlockTypeObject,
+  createMetaBulletedListBlockTypeObject,
+  createMetaHeadingBlockTypeObject,
+  createMetaNumberedListBlockTypeObject,
+  createMetaParagraphBlockTypeObject,
 };

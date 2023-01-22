@@ -1,18 +1,27 @@
+import { MetaBlockTypeObject } from "../types/mod.ts";
+
 type ListType = "bulleted" | "numbered";
 
 const _stack: {
   type: ListType;
+  items: MetaBlockTypeObject[];
 }[] = [];
 
 const listStack = {
-  push: function (listType: ListType) {
-    _stack.push({ type: listType });
+  push: (listType: ListType) => {
+    _stack.push({ type: listType, items: [] });
   },
-  pop: function () {
-    return { ..._stack };
+  pushItem: (listItem: MetaBlockTypeObject) => {
+    _stack.at(-1)?.items.push(listItem);
   },
-  currentType: function () {
+  popItems: () => {
+    return _stack.pop()?.items ?? [];
+  },
+  currentType: () => {
     return _stack.at(-1)?.type;
+  },
+  currentLevel: () => {
+    return _stack.length;
   },
 };
 

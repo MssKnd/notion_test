@@ -73,7 +73,7 @@ type RichTextObjectText =
   & {
     text: {
       content: string;
-      link: string | null;
+      link: { url: string } | null;
     };
   };
 type RichTextObjectMention = RichTextObjectBase;
