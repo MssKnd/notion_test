@@ -11,11 +11,12 @@ const richTextStack = {
   push: (richTextObject: RichTextObject) => {
     _stack.at(-1)?.richTextObjects.push(richTextObject);
   },
+  popLevel: () => {
+    _stack.pop();
+  },
   popAll: function () {
     const current = _stack.pop();
-    if (_stack.length === 0) {
-      this.pushLevel();
-    }
+    this.pushLevel();
     return current?.richTextObjects ?? [];
   },
   appendSoftBreak: () => {
