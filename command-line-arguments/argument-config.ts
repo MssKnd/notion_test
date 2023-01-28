@@ -15,7 +15,7 @@ function validateCommandLineArgument(input: unknown) {
   };
 
   if (!isObject(input)) {
-    throw new Error();
+    throw new Error('invalid argument');
   }
 
   if (
